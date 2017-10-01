@@ -17,4 +17,6 @@
 
 # Releases
 target
-credentials.json
+
+#Vendor specifics
+vendor
