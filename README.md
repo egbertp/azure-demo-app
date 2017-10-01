@@ -25,3 +25,7 @@ $ make release
 ### Use tha app
 
 Point your browser to `http://localhost:7000/version`
+
+### Upload the docker container
+
+docker push poteb/azure-demo-app
