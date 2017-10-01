@@ -50,9 +50,8 @@ import (
 	"net/http"
 	"time"
 
-	"flag"
-
 	"github.com/gorilla/mux"
+	"github.com/kelseyhightower/envconfig"
 	"gitlab.com/egbertp/azure-demo-app/handlers"
 	"gitlab.com/egbertp/azure-demo-app/helpers"
 	"gitlab.com/egbertp/azure-demo-app/middleware"
@@ -65,15 +64,26 @@ var (
 	BuildTime  string
 )
 
+type Configuration struct {
+	Debug   bool   `default:"false"`
+	Address string `default:"0.0.0.0:7000"`
+}
+
 func main() {
-	var (
-		httpAddr = flag.String("http", "0.0.0.0:7000", "HTTP server address")
-	)
-	flag.Parse()
+	var c Configuration
+	err := envconfig.Process("azure_demo_app", &c)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	// var (
+	// 	httpAddr = flag.String("http", "0.0.0.0:7000", "HTTP server address")
+	// )
+	// flag.Parse()
 
 	log.Println("Starting Azure Demo App")
 	log.Printf("The version is: %s; the commit hash is: %s. Build time is: %s", VersionTag, CommitHash, helpers.ParseBuildTime(BuildTime).Format(time.RFC1123))
-	log.Printf("listening on address %s", *httpAddr)
+	log.Printf("listening on address %s", c.Address)
 
 	handlers.CommitHash = CommitHash
 	handlers.VersionTag = VersionTag
@@ -87,7 +97,7 @@ func main() {
 
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
 
-	log.Fatal(http.ListenAndServe(*httpAddr, middleware.CombinedMiddleware(r)))
+	log.Fatal(http.ListenAndServe(c.Address, middleware.CombinedMiddleware(r)))
 
 }
 
