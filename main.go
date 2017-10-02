@@ -50,11 +50,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/egbertp/azure-demo-app/handlers"
+	"github.com/egbertp/azure-demo-app/helpers"
+	"github.com/egbertp/azure-demo-app/middleware"
 	"github.com/gorilla/mux"
 	"github.com/kelseyhightower/envconfig"
-	"gitlab.com/egbertp/azure-demo-app/handlers"
-	"gitlab.com/egbertp/azure-demo-app/helpers"
-	"gitlab.com/egbertp/azure-demo-app/middleware"
 )
 
 // Variables to identiy the build
